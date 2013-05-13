@@ -1,5 +1,5 @@
-SpreeYandexMarket
-=================
+spree_yandex_market
+==================
 
 Little extension for exporting products into Yandex Market Language format. This extension is interested mostly for cyrilic users.
 
@@ -8,22 +8,31 @@ Little extension for exporting products into Yandex Market Language format. This
 - Полное управление через админ-интерфейс (ищите вкладку в разделе конфигурации)
 - Возможность выбора таксономии, которая будет отражать категории
 - Возможность частичного экспорта (таксоны первого уровня)
-- Экспортирует отсутствующие товары, если в настройках Spree выбрано показывать их
+- Экспортирует отсутствующие товары, если в настройках Spree выбрано показывать их на сайте
 - Обрабатывает опции вариантов и склеивает их в параметры (напр.: цвет - зеленый, красный, синий)
 
 TODO:
-- Другие модели данных, кроме 'vendor.model'
+- Другие модели данных, кроме `vendor.model`
 - Получение производителя и модели из других источников (таксоны, ...?)
 - Контроль ставок
 
 
 Установка
 =========
+1) В Gemfile добавляем строку:
+`gem 'spree_yandex_market', github: 'youroff/spree_yandex_market'`
 
+2) Запускаем `bundle`
 
-Обязательные поля 'производитель' и 'модель' должны быть в Property продукта.
+3) Запускаем `rails g spree_yandex_market:install`
 
-Don't forget to set 'site_url'
+4) PROFIT :)
+
+Примечания
+==========
+- Яндекс требует заполнения полей "производитель" и "модель", которые скипт позволяет выбрать из свойств продукта. Так что они должны быть.
+
+- Не забудьте установить 'site_url' с http://, эта установка для генерации полных ссылок на товары и изображения.
 
 
 Copyright (c) 2013 Ivan Youroff, released under the New BSD License

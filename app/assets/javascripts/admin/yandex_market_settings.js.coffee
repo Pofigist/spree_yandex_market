@@ -7,9 +7,11 @@ $ ->
 	($ '#ym_do_export').click (e) ->
 		e.preventDefault()
 		$.post "/admin/yandex_market_settings/export", (data) ->
-			($ '#wrapper .flash').detach()
 			($ '#wrapper').prepend("<div class='flash success'>#{data}</div>")
-	
+			setTimeout ->
+				($ '#wrapper .flash').fadeOut()
+			, 3000
+				
 	cat_holder.on 'click', 'input:checkbox', -> recount_checked()
 	
 	cat_switch.click ->

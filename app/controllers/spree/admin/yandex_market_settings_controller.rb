@@ -27,7 +27,7 @@ module Spree
       end
       
       def export
-        # Thread.new { `rake yandex_market:export` }
+        Thread.new { `rake yandex_market:export` }
         render text: t(:yandex_market_generation_started), status: 200
       end
     end
