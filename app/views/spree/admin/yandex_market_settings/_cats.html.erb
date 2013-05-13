@@ -1,0 +1,7 @@
+<% selected = Spree::YandexMarketConfig[:cat_list].split(',').map(&:to_i) %>
+<% taxonomy.root.children.each do |t| %>
+	<div class="field">
+		<%= check_box_tag "taxon_#{t.id}", t.id, selected.include?(t.id) %>
+		<%= label_tag "taxon_#{t.id}", t.name %>
+	</div>
+<% end %>

@@ -1,0 +1,2 @@
+<!-- insert_after "code[erb-loud]:contains('edit_admin_inventory_settings_path')" -->
+<%= configurations_sidebar_menu_item t(:yandex_market), edit_admin_yandex_market_settings_path %>

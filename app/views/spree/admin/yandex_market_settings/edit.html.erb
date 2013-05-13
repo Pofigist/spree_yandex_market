@@ -1,0 +1,115 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<% content_for :page_title do %>
+  <%= t(:yandex_market_settings) %>
+<% end %>
+
+<%= form_tag admin_yandex_market_settings_path, :method => :put do %>
+  
+	<fieldset class="no-border-top">
+		<fieldset class="no-border-bottom">
+			<legend align="center"><%= t(:general_settings)%></legend>
+			<div class="field alpha ten columns">
+				<div class="warning note"><%= t(:yandex_market_settings_note) %></div>
+			</div>
+			<div class="field omega two columns" style="text-align: right;">
+				<button id="ym_do_export">Экспорт</button>
+			</div>
+			<div class="clear"></div>
+
+			<div class="field">
+			  <%= label_tag 'preferences[file_path]', t(:yandex_market_file_path) %>
+			  <%= preference_field_tag 'preferences[file_path]', Spree::YandexMarketConfig[:file_path], :type => :string %>
+			</div>
+
+			<div class="alpha six columns">
+			  <div class="field">
+			    <%= label_tag 'preferences[shop_name]', t(:yandex_market_shop_name) %>
+			    <%= preference_field_tag 'preferences[shop_name]', Spree::YandexMarketConfig[:shop_name], :type => :string %>
+			  </div>
+			</div>
+			<div class="omega six columns">
+			  <div class="field">
+			    <%= label_tag 'preferences[shop_agency]', t(:yandex_market_shop_agency) %>
+			    <%= preference_field_tag 'preferences[shop_agency]', Spree::YandexMarketConfig[:shop_agency], :type => :string %>
+			  </div>
+			</div>
+			<div class="alpha six columns">
+			  <div class="field">
+			    <%= label_tag 'preferences[shop_company]', t(:yandex_market_shop_company) %>
+			    <%= preference_field_tag 'preferences[shop_company]', Spree::YandexMarketConfig[:shop_company], :type => :string %>
+			  </div>
+			</div>
+			<div class="omega six columns">
+			  <div class="field">
+			    <%= label_tag 'preferences[shop_email]', t(:yandex_market_shop_email) %>
+			    <%= preference_field_tag 'preferences[shop_email]', Spree::YandexMarketConfig[:shop_email], :type => :string %>
+			  </div>
+			</div>
+		<div class="clear"></div>
+	</fieldset>
+	
+	<fieldset class="no-border-bottom">
+		<legend align="center"><%= t(:categories_settings)%></legend>
+		<div class="alpha six columns">
+		  	<div class="field">
+		    	<%= label_tag 'preferences[cat_taxonomy_id]', t(:yandex_market_cat_root_taxonomy) %>
+				<%= collection_select 'preferences', 'cat_taxonomy_id', @taxonomies.all, :id, :name, {:selected => Spree::YandexMarketConfig[:cat_taxonomy_id] }, :class => 'select2 fullwidth' %>
+		  	</div>
+			<div id="cat_filter_switch" class="field">
+				<%= preference_field_tag 'preferences[cat_filtered]', Spree::YandexMarketConfig[:cat_filtered], :type => :boolean %>
+				<%= label_tag 'preferences[cat_filtered]', t(:yandex_market_cat_filtered) %>
+				<%= hidden_field_tag 'preferences[cat_list]', Spree::YandexMarketConfig[:cat_list] %>
+			</div>
+		</div>
+		<div id="ym_cats_holder" class="omega six columns">
+			<%= render partial: "cats", locals: {taxonomy: @taxonomies.find(Spree::YandexMarketConfig[:cat_taxonomy_id])} if Spree::YandexMarketConfig[:cat_filtered] %>
+		</div>
+		<div class="clear"></div>
+	</fieldset>
+	
+	<fieldset class="no-border-bottom">
+		<legend align="center"><%= t(:products_settings)%></legend>
+		<div class="alpha six columns">
+			<div class="field">
+		    	<%= label_tag 'preferences[vendor_prop]', t(:yandex_market_vendor_prop) %>
+				<%= collection_select 'preferences', 'vendor_prop', Spree::Property.all, :id, :name, {:selected => Spree::YandexMarketConfig[:vendor_prop] }, :class => 'select2 fullwidth' %>
+		  	</div>
+			<div class="field">
+		    	<%= label_tag 'preferences[model_prop]', t(:yandex_market_model_prop) %>
+				<%= collection_select 'preferences', 'model_prop', Spree::Property.all, :id, :name, {:selected => Spree::YandexMarketConfig[:model_prop] }, :class => 'select2 fullwidth' %>
+		  	</div>
+		</div>
+		<div class="omega six columns">
+			<h5><%= t(:yandex_market_availability_options) %></h5>
+			<div class="field">
+				<%= preference_field_tag 'preferences[store]', Spree::YandexMarketConfig[:store], :type => :boolean %>
+				<%= label_tag 'preferences[store]', t(:yandex_market_store) %>
+			</div>
+			<div class="field">
+				<%= preference_field_tag 'preferences[pickup]', Spree::YandexMarketConfig[:pickup], :type => :boolean %>
+				<%= label_tag 'preferences[pickup]', t(:yandex_market_pickup) %>
+			</div>
+			<div class="field">
+				<%= preference_field_tag 'preferences[delivery]', Spree::YandexMarketConfig[:delivery], :type => :boolean %>
+				<%= label_tag 'preferences[delivery]', t(:yandex_market_delivery) %>
+			</div>
+			<h5><%= t(:yandex_market_special_properties) %></h5>
+			<div class="field">
+				<%= preference_field_tag 'preferences[adult]', Spree::YandexMarketConfig[:adult], :type => :boolean %>
+				<%= label_tag 'preferences[adult]', t(:yandex_market_adult) %>
+			</div>
+			<div class="field">
+				<%= label_tag 'preferences[age]', t(:yandex_market_age) %>
+				<%= collection_select 'preferences', 'age', [[0], [6], [12], [16], [18]], :first, :first, {:selected => Spree::YandexMarketConfig[:age] }, :class => 'select2 fullwidth' %>
+			</div>
+		</div>
+		
+	</fieldset>
+
+    <div class="form-buttons filter-actions actions" data-hook="buttons">
+      <%= button t(:update), 'icon-refresh' %>
+    </div>
+  </fieldset>
+
+<% end %>

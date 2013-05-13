@@ -1,0 +1,24 @@
+ru:
+    yandex_market: Экспорт в YandexMarket
+    yandex_market_settings: Настройки экспорта в YandexMarket
+    yandex_market_settings_note: Для генерации прайс-листа из командной строки используйте команду 'rake yandex_market:export'
+    yandex_market_file_path: Путь к файлу прайс-листа относительно директории 'public/'
+    yandex_market_shop_name: Короткое название магазина (до 20 символов)
+    yandex_market_shop_company: Название юр.лица (для внутреннего учета)
+    yandex_market_shop_agency: Название агентства, поддерживающего сайт
+    yandex_market_shop_email: Контактный email техподдержки
+    categories_settings: Настройки категорий
+    products_settings: Настройки товаров
+    yandex_market_settings_updated: Настройки экспорта в YandexMarket обновлены
+    yandex_market_cat_root_taxonomy: Таксономия категорий
+    yandex_market_cat_filtered: Выбрать категории для экспорта
+    yandex_market_vendor_prop: Свойство определяющее производителя (vendor)
+    yandex_market_model_prop: Свойство определяющее модель (model)
+    yandex_market_store: В магазине
+    yandex_market_pickup: Самовывоз
+    yandex_market_delivery: Доставка
+    yandex_market_availability_options: Способы получения товара
+    yandex_market_special_properties: Особые свойства
+    yandex_market_adult: Товары для взрослых
+    yandex_market_age: Возрастная категория
+    yandex_market_generation_started: Прайс-лист Yandex Market генерируется. Это может занять продолжительное время!
