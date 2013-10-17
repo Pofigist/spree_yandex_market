@@ -48,7 +48,7 @@ class YandexMarketExport
   def offers(xml)
     xml.offers {
       products.each do |p|
-        xml.offer id: p.id, type: "vendor.model", available: p.on_hand > 0 do |o|
+        xml.offer id: p.id, type: "vendor.model", available: true do |o|
           category = p.taxons.where(taxonomy_id: @cat_taxonomy.id).first
           o.url         "#{Spree::Config.site_url}/products/#{p.permalink}"
           o.price       p.price.to_i
@@ -69,7 +69,7 @@ class YandexMarketExport
             o.param prod_prop, name: prop.presentation unless prop.id == y(:vendor_prop) || prop.id == y(:model_prop)
           end
           p.option_types.each do |opt_type|
-            opt_values = p.variants.select {|v| Spree::Config[:show_zero_stock_products] || v.on_hand > 0}.map {|v| v.option_value(opt_type.name) }
+            opt_values = p.variants.map {|v| v.option_value(opt_type.name) }
             o.param opt_values.uniq.sort.join(','), name: opt_type.presentation
           end
         end
