@@ -87,7 +87,6 @@ class YandexMarketExport
   
   def products
     ps = Spree::Product.active
-    ps = ps.on_hand unless Spree::Config[:show_zero_stock_products]
     ps
   end
   
