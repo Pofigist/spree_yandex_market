@@ -21,7 +21,7 @@ module Spree
     preference :vendor_prop, :integer
     preference :model_prop, :integer
     
-    preference :store, :boolean, default: true
+    preference :store, :boolean, default: false
     preference :pickup, :boolean, default: true
     preference :delivery, :boolean, default: true
     
