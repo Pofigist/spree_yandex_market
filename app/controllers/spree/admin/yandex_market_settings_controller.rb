@@ -14,7 +14,7 @@ module Spree
 
       def taxonomy_taxons
           @root = Spree::Taxonomy.find(params[:taxonomy_id]).try(:root)
-          @taxons = Spree::Taxons.where("parent_id = #{@root.try(:id)}")
+          @taxons = Spree::Taxon.where("parent_id = #{@root.try(:id)}")
           render 'taxonomy_taxons'
       end
 
