@@ -1,35 +1,60 @@
 module Spree
   module Admin
-    class YandexMarketSettingsController < Spree::Admin::BaseController
+    class WizardsController < Spree::Admin::BaseController
+
+      def index
+        @wizards=Spree::Wizard.order(:id)
+      end
+
+      def new
+        @wizard=Spree::Wizard.new
+      end
+
+      def create
+        if params[:wizard][:name].present?
+          @wizard=Spree::Wizard.new(:name=>params[:wizard][:name])
+          if @wizard.save
+            @wizard.create_wizard_taxons(@wizard,params[:wizard][:wizard_taxon_ids])
+            flash[:success]='Wizard был успешно создан'
+          else
+            flash[:notice]='Wizard не был создан'
+          end
+        else
+          flash[:notice]='Wizard не был создан'
+        end
+        redirect_to main_app.admin_wizards_path
+      end
+
+
       def edit
-        @taxonomies = Spree::Taxonomy.limit(10)
+        @wizard=Spree::Wizard.find(params[:id])
+        @wizard_taxons=@wizard.wizard_taxons
       end
 
       def update
-        Spree::YandexMarketConfig.set(params[:preferences])
+        @wizard=Spree::Wizard.find(params[:id])
+        if @wizard.update_attributes(:name=>params[:wizard][:name],:tags=>params[:wizard][:tags])
+          flash[:success]='Wizard был успешно обновлен'
+        else
+          flash[:notice]='Wizard не был обновлен'
+        end
+        @wizard.edit_wizard_taxons(@wizard,params[:wizard][:wizard_taxon_ids])
+        redirect_to main_app.admin_wizards_path
+      end
 
-        respond_to do |format|
-          format.html {
-            flash[:success] = t(:yandex_market_settings_updated)
-            redirect_to edit_admin_yandex_market_settings_path
-          }
-        end
+      def destroy
+        @wizard=Spree::Wizard.find(params[:id])
+        @wizard.destroy
       end
-      
-      def taxonomy
-        taxonomy = Taxonomy.find(params[:id])
-        out = render_to_string(:partial => 'cats', :formats => :html, :layout => false, :locals => {:taxonomy => taxonomy})
-        respond_to do |format|
-          format.json {
-            render :json => {html: out}
-          }
-        end
+
+
+      def search
+        taxons_pre=Spree::Taxon.search(:id_in=>params[:ids].split(',')).result if params[:ids]
+        @taxons=taxons_pre.map{|e| [id: e.id,name: e.pretty_name]}.flatten if taxons_pre.present?
+        @taxons=Spree::Taxon.joins(:taxonomy).where("lower(spree_taxons.name) ILIKE lower('%#{params[:q][:name_cont]}%')").limit(10).map{|e| [id: e.id,name: e.pretty_name]}.flatten if !params[:ids]
+        render :json=>@taxons.to_json
       end
-      
-      def export
-        Thread.new { `rake yandex_market:export` }
-        render text: t(:yandex_market_generation_started), status: 200
-      end
+
     end
   end
 end
