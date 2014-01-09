@@ -86,7 +86,7 @@ class YandexMarketExport
   end
   
   def products
-    ps = Spree::Product.active
+    ps = Spree::Product.active.joins(:taxons).where(id: cats.map{|e| e.id})
     ps
   end
   
