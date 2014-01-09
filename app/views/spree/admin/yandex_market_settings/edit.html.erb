@@ -5,7 +5,7 @@
 <% end %>
 
 <%= form_tag admin_yandex_market_settings_path, :method => :put do %>
-  
+
 	<fieldset class="no-border-top">
 		<fieldset class="no-border-bottom">
 			<legend align="center"><%= t(:general_settings)%></legend>
@@ -48,14 +48,14 @@
 			</div>
 		<div class="clear"></div>
 	</fieldset>
-	
+
 	<fieldset class="no-border-bottom">
 		<legend align="center"><%= t(:categories_settings)%></legend>
 		<div class="alpha six columns">
 		  	<div class="field">
 		    	<%= label_tag 'preferences[cat_taxonomy_id]', t(:yandex_market_cat_root_taxonomy) %>
-		    	<%=hidden_field_tag :cat_taxonomy_id, :value => Spree::YandexMarketConfig[:cat_taxonomy_id]%>
-				<%= collection_select 'preferences', 'cat_taxonomy_id', @taxonomies.all, :id, :name, {:selected => Spree::YandexMarketConfig[:cat_taxonomy_id] }, :class => 'select2 fullwidth' %>
+                <br>
+                <%= hidden_field_tag :cat_taxonomy_id, :value => Spree::YandexMarketConfig[:cat_taxonomy_id],:class=>'fullwidth'%>
 		  	</div>
 			<div id="cat_filter_switch" class="field">
 				<%= preference_field_tag 'preferences[cat_filtered]', Spree::YandexMarketConfig[:cat_filtered], :type => :boolean %>
@@ -68,7 +68,7 @@
 		</div>
 		<div class="clear"></div>
 	</fieldset>
-	
+
 	<fieldset class="no-border-bottom">
 		<legend align="center"><%= t(:products_settings)%></legend>
 		<div class="alpha six columns">
@@ -105,7 +105,7 @@
 				<%= collection_select 'preferences', 'age', [[0], [6], [12], [16], [18]], :first, :first, {:selected => Spree::YandexMarketConfig[:age] }, :class => 'select2 fullwidth' %>
 			</div>
 		</div>
-		
+
 	</fieldset>
 
     <div class="form-buttons filter-actions actions" data-hook="buttons">
@@ -113,7 +113,7 @@
     </div>
   </fieldset>
 
-<% end %>  
+<% end %>
 <script>
 $(document).ready(function() {
   if ($("#cat_taxonomy_id").length > 0) {
