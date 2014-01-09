@@ -13,7 +13,8 @@ module Spree
       end
 
       def taxonomy_taxons
-          @taxons = Spree::Taxon.joins(:taxonomy).where("spree_taxonomies.id = #{params[:taxonomy_id]}")
+          @root = Spree::Taxonomy.find(params[:taxonomy_id]).try(:root)
+          @taxons = @root.taxons
           render 'taxonomy_taxons'
       end
 
