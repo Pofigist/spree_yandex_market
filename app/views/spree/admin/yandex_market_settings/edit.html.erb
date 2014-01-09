@@ -57,7 +57,7 @@
                 <br>
                 <%= hidden_field_tag :cat_taxonomy_id, Spree::YandexMarketConfig[:cat_taxonomy_id]  %>
 		  	</div>
-			<div id="cat_filter_switch" class="field">
+			<div id="cat_filter_switcher" class="field">
 				<%= preference_field_tag 'preferences[cat_filtered]', Spree::YandexMarketConfig[:cat_filtered], :type => :boolean %>
 				<%= label_tag 'preferences[cat_filtered]', t(:yandex_market_cat_filtered) %>
 				<%= hidden_field_tag 'preferences[cat_list]', Spree::YandexMarketConfig[:cat_list] %>
@@ -120,7 +120,7 @@
     </style>
 <script>
 $(document).ready(function() {
-        $('#preferences_cat_filtered').change(function(){
+        $($("[name='preferences[cat_filtered]']")[1]).click(function(){
             if($($("[name='preferences[cat_filtered]']")[1]).attr("checked")== 'checked'){
             debugger
             tax_id = $("#cat_taxonomy_id").val()
