@@ -122,7 +122,6 @@
 $(document).ready(function() {
         $($("[name='preferences[cat_filtered]']")[1]).click(function(){
             if($($("[name='preferences[cat_filtered]']")[1]).attr("checked")== 'checked'){
-            debugger
             tax_id = $("#cat_taxonomy_id").val()
             $.ajax({
 url: '/admin/yandex_market_settings/taxonomies/taxons',
