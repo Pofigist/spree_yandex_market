@@ -54,6 +54,7 @@
 		<div class="alpha six columns">
 		  	<div class="field">
 		    	<%= label_tag 'preferences[cat_taxonomy_id]', t(:yandex_market_cat_root_taxonomy) %>
+		    	<%=hidden_field_tag :cat_taxonomy_id, :value => Spree::YandexMarketConfig[:cat_taxonomy_id]%>
 				<%= collection_select 'preferences', 'cat_taxonomy_id', @taxonomies.all, :id, :name, {:selected => Spree::YandexMarketConfig[:cat_taxonomy_id] }, :class => 'select2 fullwidth' %>
 		  	</div>
 			<div id="cat_filter_switch" class="field">
@@ -112,4 +113,39 @@
     </div>
   </fieldset>
 
-<% end %>
+<% end %>  
+<script>
+Spree.routes.wizard_taxons_search='/admin/wizards/taxons/search'
+$(document).ready(function() {
+  if ($("#cat_taxonomy_id").length > 0) {
+    $("#cat_taxonomy_id").select2({
+      placeholder: 'Выберите таксон',
+      initSelection: function(element, callback) {
+        url = Spree.url(Spree.routes.wizard_taxons_search, { ids: element.val() })
+        return $.getJSON(url, null, function(data) {
+          return callback(data);
+        })
+      },
+      ajax: {
+        url: Spree.routes.wizard_taxons_search,
+        datatype: 'json',
+        data: function(term, page) {
+          return { q:
+            { name_cont: term }
+          }
+        },
+        results: function (data, page) {
+          return { results: data }
+        }
+      },
+      formatResult: function(taxon) {
+        return taxon.name
+      },
+      formatSelection: function(taxon) {
+        return taxon.name
+      }
+    })
+  }
+})
+;
+</script>
