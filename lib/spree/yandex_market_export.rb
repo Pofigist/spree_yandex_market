@@ -64,10 +64,6 @@ class YandexMarketExport
                     o.description p.description
                     o.adult       y(:adult) if y(:adult)
                     o.age         y(:age) unless y(:age) == 0
-                    p.properties.except(:order).select("distinct(spree_properties.*)").where("value is not null and value not like '%xsd:string%' AND spree_properties.name not like '%xsd:string%'").each do |prop|
-                        prod_prop = p.property(prop.name)
-                        o.param prod_prop, name: prop.presentation unless prop.id == y(:vendor_prop) || prop.id == y(:model_prop)
-                    end
                 end
             end
         }
