@@ -73,11 +73,11 @@
 		<div class="alpha six columns">
 			<div class="field">
 		    	<%= label_tag 'preferences[vendor_prop]', t(:yandex_market_vendor_prop) %>
-				<%= collection_select 'preferences', 'vendor_prop', Spree::Property.all, :id, :name, {:selected => Spree::YandexMarketConfig[:vendor_prop] }, :class => 'select2 fullwidth' %>
+				<%= hidden_field_tag 'preferences[vendor_prop]',Spree::YandexMarketConfig[:vendor_prop], :class => 'select2 fullwidth' %>
 		  	</div>
 			<div class="field">
 		    	<%= label_tag 'preferences[model_prop]', t(:yandex_market_model_prop) %>
-				<%= collection_select 'preferences', 'model_prop', Spree::Property.all, :id, :name, {:selected => Spree::YandexMarketConfig[:model_prop] }, :class => 'select2 fullwidth' %>
+				<%= hidden_field_tag 'preferences[model_prop]', Spree::YandexMarketConfig[:model_prop], :class => 'select2 fullwidth' %>
 		  	</div>
 		</div>
 		<div class="omega six columns">
@@ -134,6 +134,7 @@ data: {taxonomy_id: tax_id }
   if ($("#preferences_cat_taxonomy_id").length > 0) {
     $("#preferences_cat_taxonomy_id").select2({
       placeholder: Spree.translations.taxon_placeholder,
+      multiple: 'true',
       initSelection: function(element, callback) {
       url = "/admin/yandex_market_settings/taxonomies/search?ids=none"
         return $.getJSON(url, null, function(data) {
@@ -168,4 +169,67 @@ data: {taxonomy_id: tax_id }
   }
 })
 ;
+$(document).ready(function(){
+          if ($("#preferences_model_prop").length > 0) {
+    $("#preferences_model_prop").select2({
+      placeholder: 'Добавьте свойство',
+      initSelection: function(element, callback) {
+        url =  '/admin/yandex_market_settings/properties/find?ids=model'
+        return $.getJSON(url, null, function(data) {
+          return callback(data);
+        })
+      },
+      ajax: {
+        url: '/admin/yandex_market_settings/properties/find',
+        datatype: 'json',
+        data: function(term, page) {
+          return { q:
+          { name_cont: term }
+          }
+        },
+        results: function (data, page) {
+          return { results: data }
+        }
+      },
+      formatResult: function(taxon) {
+        return taxon.name
+      },
+      formatSelection: function(taxon) {
+        return taxon.name
+      }
+    })
+  }
+        })
+$(document).ready(function(){
+          if ($("#preferences_vendor_prop").length > 0) {
+    $("#preferences_vendor_prop").select2({
+      placeholder: 'Добавьте свойство',
+      initSelection: function(element, callback) {
+        url =  '/admin/yandex_market_settings/properties/find?ids=vendor'
+        return $.getJSON(url, null, function(data) {
+          return callback(data);
+        })
+      },
+      ajax: {
+        url: '/admin/yandex_market_settings/properties/find',
+        datatype: 'json',
+        data: function(term, page) {
+          return { q:
+          { name_cont: term }
+          }
+        },
+        results: function (data, page) {
+          return { results: data }
+        }
+      },
+      formatResult: function(taxon) {
+        return taxon.name
+      },
+      formatSelection: function(taxon) {
+        return taxon.name
+      }
+    })
+  }
+        })
+
 </script>
