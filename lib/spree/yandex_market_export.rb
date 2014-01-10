@@ -71,7 +71,7 @@ class YandexMarketExport
     end
 
     def cats(taxonomy)
-        taxonomy.root.descendants
+        taxonomy.root.self_and_descendants
     end
 
     def products
