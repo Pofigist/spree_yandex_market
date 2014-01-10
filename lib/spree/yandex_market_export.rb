@@ -39,7 +39,7 @@ class YandexMarketExport
             Spree::Taxonomy.where("spree_taxonomies.id in (#{y(:cat_taxonomy_ids)})").each do |e|
                 cats(e).each do |c|
                     params = {id: c.id}
-                    params[:parentId] = c.parent_id if c.parent != e.root
+                    params[:parentId] = c.parent_id if c.parent_id
                     xml.category c.name, params
                 end
             end
