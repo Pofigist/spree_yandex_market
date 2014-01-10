@@ -53,9 +53,9 @@
 		<legend align="center"><%= t(:categories_settings)%></legend>
 		<div class="alpha six columns">
 		  	<div class="field">
-		    	<%= label_tag 'preferences[cat_taxonomy_id]', t(:yandex_market_cat_root_taxonomy) %>
+		    	<%= label_tag 'preferences[cat_taxonomy_ids]', t(:yandex_market_cat_root_taxonomy) %>
                 <br>
-                <%= hidden_field_tag 'preferences[cat_taxonomy_id]', Spree::YandexMarketConfig[:cat_taxonomy_id]  %>
+                <%= hidden_field_tag 'preferences[cat_taxonomy_ids]', Spree::YandexMarketConfig[:cat_taxonomy_id]  %>
 		  	</div>
 			<div id="cat_filter_switcher" class="field">
 				<%= preference_field_tag 'preferences[cat_filtered]', Spree::YandexMarketConfig[:cat_filtered], :type => :boolean %>
@@ -131,8 +131,8 @@ data: {taxonomy_id: tax_id }
             $('#ym_cats_holder').html('')
             }
             })
-  if ($("#preferences_cat_taxonomy_id").length > 0) {
-    $("#preferences_cat_taxonomy_id").select2({
+  if ($("#preferences_cat_taxonomy_ids").length > 0) {
+    $("#preferences_cat_taxonomy_ids").select2({
       placeholder: Spree.translations.taxon_placeholder,
       multiple: 'true',
       initSelection: function(element, callback) {
@@ -158,11 +158,11 @@ data: {taxonomy_id: tax_id }
             return taxon.name
       },
       formatSelection: function(taxon) {
-            tax_id = $("#preferences_cat_taxonomy_id").val()
+            /*tax_id = $("#preferences_cat_taxonomy_ids").val()
             $.ajax({
                 url: '/admin/yandex_market_settings/taxonomies/taxons',
                 data: {taxonomy_id: tax_id }
-            })
+            })*/
         return taxon.name
       }
     })
