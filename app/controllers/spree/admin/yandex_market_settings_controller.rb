@@ -6,7 +6,7 @@ module Spree
       end
 
       def taxonomies_search
-          taxonomies_pre=Spree::Taxonomy.search(:id_in => Spree::YandexMarketConfig[:cat_taxonomy_id]).result.first if params[:ids] == 'none'
+          taxonomies_pre=Spree::Taxonomy.search(:id_in => Spree::YandexMarketConfig[:cat_taxonomy_ids]).result.first if params[:ids] == 'none'
           @taxonomies={id: taxonomies_pre.id,name: taxonomies_pre.name} if taxonomies_pre.present?
           @taxonomies=Spree::Taxonomy.where("lower(spree_taxonomies.name) ILIKE lower('%#{params[:q][:name_cont]}%')").limit(10).map{|e| [id: e.id,name: e.name]}.flatten if params[:ids] != 'none'
           render :json=>@taxonomies.to_json
