@@ -2,7 +2,6 @@ module Spree
   module Admin
     class YandexMarketSettingsController < Spree::Admin::BaseController
       def edit
-        @taxonomies = Spree::Taxonomy.limit(10)
       end
 
       def taxonomies_search
