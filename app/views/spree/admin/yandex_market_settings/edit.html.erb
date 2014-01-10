@@ -55,7 +55,7 @@
 		  	<div class="field">
 		    	<%= label_tag 'preferences[cat_taxonomy_ids]', t(:yandex_market_cat_root_taxonomy) %>
                 <br>
-                <%= hidden_field_tag 'preferences[cat_taxonomy_ids]', Spree::YandexMarketConfig[:cat_taxonomy_id]  %>
+                <%= hidden_field_tag 'preferences[cat_taxonomy_ids]', Spree::YandexMarketConfig[:cat_taxonomy_ids]  %>
 		  	</div>
 			<div id="cat_filter_switcher" class="field">
 				<%= preference_field_tag 'preferences[cat_filtered]', Spree::YandexMarketConfig[:cat_filtered], :type => :boolean %>
