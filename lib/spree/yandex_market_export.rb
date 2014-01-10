@@ -4,7 +4,6 @@ require 'nokogiri'
 class YandexMarketExport
 
     def initialize
-        @cat_taxonomy = Spree::Taxonomy.find(y :cat_taxonomy_id)
         @builder = Nokogiri::XML::Builder.new encoding: 'UTF-8' do |xml|
             xml.doc.create_internal_subset('yml_catalog', nil, 'shops.dtd')
             xml.yml_catalog(date: Time.now.strftime("%Y-%m-%d %H:%M")) {
@@ -37,10 +36,12 @@ class YandexMarketExport
 
     def categories(xml)
         xml.categories {
-            cats.each do |c|
-                params = {id: c.id}
-                params[:parentId] = c.parent_id if c.parent != @cat_taxonomy.root
-                xml.category c.name, params
+            Spree::Taxonomy.where("spree_taxonomies.id in (#{y(:cat_taxonomy_ids)})").each do |e|
+                cats(e).each do |c|
+                    params = {id: c.id}
+                    params[:parentId] = c.parent_id if c.parent != e.root
+                    xml.category c.name, params
+                end
             end
         }
     end
@@ -49,7 +50,7 @@ class YandexMarketExport
         xml.offers {
             products.each do |p|
                 xml.offer id: p.id, type: "vendor.model", available: true do |o|
-                    category = p.taxons.where(taxonomy_id: @cat_taxonomy.id).first
+                    category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
                     o.url         "#{Spree::Config.site_url}/products/#{p.permalink}"
                     o.price       p.price.to_i
                     o.currencyId  Spree::Config[:currency]
@@ -69,20 +70,13 @@ class YandexMarketExport
         }
     end
 
-    def cats
-        if y(:cat_filtered)
-            @cat_taxonomy.taxons.where(id: y(:cat_list).split(',').map(&:to_i)).map(&:self_and_descendants).flatten
-        else
-            @cat_taxonomy.root.descendants
-        end
+    def cats(taxonomy)
+        taxonomy.root.descendants
     end
 
     def products
-        ps = []
-        cats.each do |c|
-            ps << Spree::Product.joins(master: :prices).distinct_in_taxon(c).where("spree_prices.amount > 0")
-        end
-        ps.flatten.uniq
+        ps = Spree::Product.select("distinct(spree_products.*)").joins(master: :prices).joins(:taxons).where("spree_prices.amount > 0 and spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})")
+        ps
     end
 
     def model_prop
