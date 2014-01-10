@@ -80,8 +80,7 @@ class YandexMarketExport
     def products
         ps = []
         cats.each do |c|
-            ps << Spree::Product.distinct_in_taxon(c)
-            #ps = Spree::Product.active.joins(taxons: :taxonomy).where("spree_taxonomies.id = #{@cat_taxonomy.id}")
+            ps << Spree::Product.joins(master: :prices).distinct_in_taxon(c).where("spree_prices.amount > 0")
         end
         ps.flatten.uniq
     end
