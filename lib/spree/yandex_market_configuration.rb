@@ -10,7 +10,7 @@ module Spree
     preference :shop_email, :string
     
     #Categories
-    preference :cat_taxonomy_id, :integer
+    preference :cat_taxonomy_ids, :string
     preference :cat_filtered, :boolean, default: false
     preference :cat_list, :string, default: ""
     
