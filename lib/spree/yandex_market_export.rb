@@ -76,7 +76,7 @@ class YandexMarketExport
     end
     
     def replace_s(str)
-        str.gsub("'",'&apos;').gsub('&','&amp;').gsub('<','&lt;').gsub('>','&gt;').gsub('"','&quot;')
+        str.gsub("'",'&apos;').gsub('&','&amp;').gsub('<','&lt;').gsub('>','&gt;').gsub('"','&quot;') if str.class == String
     end
 
     def products
