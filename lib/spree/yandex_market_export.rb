@@ -49,7 +49,7 @@ class YandexMarketExport
         Spree::Product.select("distinct(spree_products.*)").joins(master: :prices).joins(:taxons).where("spree_prices.amount > 0 and spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").find_each(:batch_size => 100) do |p|
             @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
             category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
-            @file.puts("<url>#{Spree::Config.site_url}/products/#{p.permalink}</url>")
+            @file.puts("<url>#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
             @file.puts("<price>#{p.price}</price>")
             @file.puts("<currencyId>#{Spree::Config[:currency]}</currencyId>")
             @file.puts("<categoryId>#{category.id}</categoryId>") if category.id
