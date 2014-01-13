@@ -37,7 +37,7 @@ class YandexMarketExport
         @file.puts("<categories>")
         Spree::Taxonomy.where("spree_taxonomies.id in (#{y(:cat_taxonomy_ids)})").each do |e|
             cats(e).each do |c|
-                @file.puts("<category id=\"#{c.id}\" parentId=\"#{c.parent_id}\">#{c.name}</category>")
+                @file.puts("<category id=\"#{c.id}\" parentId=\"#{c.parent_id}\">#{replace_s(c.name)}</category>")
             end
         end
         @file.puts("</categories>")
@@ -59,10 +59,10 @@ class YandexMarketExport
             @file.puts("<store>#{y(:store)}</store>")
             @file.puts("<pickup>#{y(:pickup)}</pickup>")
             @file.puts("<delivery>#{y(:delivery)}</delivery>")
-            @file.puts("<typePrefix>#{p.name}</typePrefix>")
-            @file.puts("<vendor>#{p.property(vendor_prop.name)}</vendor>") if vendor_prop
-            @file.puts("<model_>#{p.property(model_prop.name)}</model_>") if model_prop
-            @file.puts("<description>#{p.description}</description>")
+            @file.puts("<typePrefix>#{replace_s(p.name)}</typePrefix>")
+            @file.puts("<vendor>#{replace_s(p.property(vendor_prop.name))}</vendor>") if vendor_prop
+            @file.puts("<model_>#{replace_s(p.property(model_prop.name))}</model_>") if model_prop
+            @file.puts("<description>#{replace_s(p.description)}</description>")
             @file.puts("<adult>#{y(:adult)}</adult>") if y(:adult)
             @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
             @file.puts("</offer>")
@@ -73,6 +73,10 @@ class YandexMarketExport
 
     def cats(taxonomy)
         taxonomy.root.self_and_descendants
+    end
+    
+    def replace_s(str)
+        str.gsub("'",'&apos;').gsub('&','&amp;').gsub('<','&lt;').gsub('>','&gt;').gsub('"','&quot;')
     end
 
     def products
