@@ -12,7 +12,7 @@ class YandexMarketExport
         @file.close
     end
 
-    def shop
+   def shop
         @file.puts("<name>#{y(:shop_name)}</name>")
         @file.puts("<company>#{ y(:shop_company) }</company>")
         @file.puts("<url>#{Spree::Config.site_url}</url>")
