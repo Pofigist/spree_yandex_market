@@ -58,7 +58,7 @@ class YandexMarketExport
                 @file.puts("<currencyId>#{ "RUB" }</currencyId>")
                 @file.puts("<categoryId>#{category.id}</categoryId>")
                 p.images.first(10).each do |i|
-                    @file.puts("<picture>#{Spree::Config.site_url}#{i.attachment.url(:original)}</picture>")
+                    @file.puts("<picture>http://#{Spree::Config.site_url}#{i.attachment.url(:original)}</picture>")
                 end
                 @file.puts("<store>#{y(:store)}</store>")
                 @file.puts("<pickup>#{y(:pickup)}</pickup>")
