@@ -53,7 +53,7 @@ class YandexMarketExport
             pr_vendor = p.property(vendor_prop.name) || 'Неизвестно'
             if category.id && !pr_vendor.blank? && !p.name.blank?
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
-                @file.puts("<url>#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
+                @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
                 @file.puts("<price>#{p.price}</price>")
                 @file.puts("<currencyId>#{Spree::Config[:currency]}</currencyId>")
                 @file.puts("<categoryId>#{category.id}</categoryId>")
