@@ -7,7 +7,9 @@ class YandexMarketExport
         @file =  File.new(Rails.root.join('public', y(:file_path)), 'w:UTF-8')
         @file.truncate(0)
         @file.puts("<yml_catalog date=\"#{Time.now.strftime("%Y-%m-%d %H:%M")}\">")
+        @file.puts("<shop>")
         shop
+        @file.puts("</shop>")
         @file.puts("</yml_catalog>")
         @file.close
     end
@@ -47,25 +49,27 @@ class YandexMarketExport
     def offers
         @file.puts("<offers>")
         Spree::Product.select("distinct(spree_products.*)").joins(master: :prices).joins(:taxons).where("spree_prices.amount > 0 and spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").find_each(:batch_size => 100) do |p|
-            @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
             category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
-            @file.puts("<url>#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
-            @file.puts("<price>#{p.price}</price>")
-            @file.puts("<currencyId>#{Spree::Config[:currency]}</currencyId>")
-            @file.puts("<categoryId>#{category.id}</categoryId>") if category.id
-            p.images.first(10).each do |i|
-                @file.puts("<picture>#{Spree::Config.site_url}#{i.attachment.url(:original)}</picture>")
+            pr_vendor = p.property(vendor_prop.name) || 'Неизвестно'
+            if category.id && !pr_vendor.blank? && !p.name.blank?
+                @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
+                @file.puts("<url>#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
+                @file.puts("<price>#{p.price}</price>")
+                @file.puts("<currencyId>#{Spree::Config[:currency]}</currencyId>")
+                @file.puts("<categoryId>#{category.id}</categoryId>")
+                p.images.first(10).each do |i|
+                    @file.puts("<picture>#{Spree::Config.site_url}#{i.attachment.url(:original)}</picture>")
+                end
+                @file.puts("<store>#{y(:store)}</store>")
+                @file.puts("<pickup>#{y(:pickup)}</pickup>")
+                @file.puts("<delivery>#{y(:delivery)}</delivery>")
+                @file.puts("<vendor>#{replace_s(pr_vendor)}</vendor>")
+                @file.puts("<model>#{replace_s(p.name)}</model>")
+                @file.puts("<description>#{replace_s(p.description)}</description>")
+                @file.puts("<adult>#{y(:adult)}</adult>") if y(:adult)
+                @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
+                @file.puts("</offer>")
             end
-            @file.puts("<store>#{y(:store)}</store>")
-            @file.puts("<pickup>#{y(:pickup)}</pickup>")
-            @file.puts("<delivery>#{y(:delivery)}</delivery>")
-            @file.puts("<typePrefix>#{replace_s(p.name)}</typePrefix>")
-            @file.puts("<vendor>#{replace_s(p.property(vendor_prop.name))}</vendor>") if vendor_prop
-            @file.puts("<model>#{replace_s(p.property(model_prop.name))}</model>") if model_prop
-            @file.puts("<description>#{replace_s(p.description)}</description>")
-            @file.puts("<adult>#{y(:adult)}</adult>") if y(:adult)
-            @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
-            @file.puts("</offer>")
         end
         @file.puts("</offers>")
         return 1
