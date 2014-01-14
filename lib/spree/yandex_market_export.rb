@@ -12,7 +12,7 @@ class YandexMarketExport
         @file.close
     end
 
-    def shop
+    def shop
         @file.puts("<name>#{y(:shop_name)}</name>")
         @file.puts("<company>#{ y(:shop_company) }</company>")
         @file.puts("<url>#{Spree::Config.site_url}</url>")
@@ -61,7 +61,6 @@ class YandexMarketExport
             @file.puts("<delivery>#{y(:delivery)}</delivery>")
             @file.puts("<typePrefix>#{replace_s(p.name)}</typePrefix>")
             @file.puts("<vendor>#{replace_s(p.property(vendor_prop.name))}</vendor>") if vendor_prop
-            @file.puts("<model_>#{replace_s(p.property(model_prop.name))}</model_>") if model_prop
             @file.puts("<description>#{replace_s(p.description)}</description>")
             @file.puts("<adult>#{y(:adult)}</adult>") if y(:adult)
             @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
