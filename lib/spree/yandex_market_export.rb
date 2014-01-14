@@ -30,7 +30,7 @@ class YandexMarketExport
 
     def currencies
         @file.puts("<currencies>")
-        @file.puts("<currency id=\"#{Spree::Config[:currency]}\" rate=\"#{1}\"/>")
+        @file.puts("<currency id=\"#{ "RUB" }\" rate=\"#{1}\"/>")
         @file.puts("</currencies>")
         return 1
     end
