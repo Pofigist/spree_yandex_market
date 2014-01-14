@@ -55,7 +55,7 @@ class YandexMarketExport
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
                 @file.puts("<price>#{p.price}</price>")
-                @file.puts("<currencyId>#{Spree::Config[:currency]}</currencyId>")
+                @file.puts("<currencyId>#{ "RUB" }</currencyId>")
                 @file.puts("<categoryId>#{category.id}</categoryId>")
                 p.images.first(10).each do |i|
                     @file.puts("<picture>#{Spree::Config.site_url}#{i.attachment.url(:original)}</picture>")
