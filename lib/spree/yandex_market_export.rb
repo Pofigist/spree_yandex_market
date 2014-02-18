@@ -80,7 +80,7 @@ class YandexMarketExport
     end
     
     def replace_s(str)
-        str.gsub('&','&amp;').gsub('<','').gsub('>','').gsub('"','&quot;') if str.class == String
+        str.gsub('&','&amp;').gsub('<','').gsub('>','').gsub('"','&quot;').gsub('`','') if str.class == String
     end
 
     def products
