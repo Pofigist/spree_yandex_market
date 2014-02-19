@@ -3,9 +3,9 @@ require 'nokogiri'
 
 class YandexMarketExport
 
-  LOGGER = Logger.new("#{Rails.root}/log/yandex_logger.log")
 
     def initialize
+        @log = Logger.new("#{Rails.root}/log/yandex_logger.log")
         @file =  File.new(Rails.root.join('public', y(:file_path)), 'w:UTF-8')
         @file.truncate(0)
         @file.puts("<yml_catalog date=\"#{Time.now.strftime("%Y-%m-%d %H:%M")}\">")
@@ -54,7 +54,7 @@ class YandexMarketExport
             category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
             pr_vendor = p.property(vendor_prop.name) || p.brand
             if category.id && !pr_vendor.blank? && !p.name.blank?
-                LOGGER.info "Продукт #{p.permalink} #{p.sku} валиден"
+                @log.info "Продукт #{p.permalink}, #{p.sku} валиден"
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
                 @file.puts("<price>#{p.price}</price>")
@@ -73,8 +73,8 @@ class YandexMarketExport
                 @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
                 @file.puts("</offer>")
             else
-                LOGGER.info "Отправляется письмо на почту так как продукт #{p.permalink} #{p.sku} не валиден"
-                SupportMailer.xml_error(category,pr_vendor,p).deliver
+                @log.info "Отправляется письмо на почту так как продукт '#{p.permalink}', '#{p.sku}' не валиден"
+                Spree::Product.xml_error(category.id,pr_vendor,p.id)
                 break
             end
         end
