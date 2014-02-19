@@ -50,7 +50,7 @@ class YandexMarketExport
         @file.puts("<offers>")
         Spree::Product.select("distinct(spree_products.*)").with_provider.joins(master: :prices).joins(:taxons).where("spree_prices.amount > 0 and spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").find_each(:batch_size => 100) do |p|
             category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
-            pr_vendor = p.property(vendor_prop.name) || 'Неизвестно'
+            pr_vendor = p.property(vendor_prop.name)
             if category.id && !pr_vendor.blank? && !p.name.blank?
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
