@@ -50,7 +50,7 @@ class YandexMarketExport
         @file.puts("<offers>")
         Spree::Product.select("distinct(spree_products.*)").with_provider.joins(master: :prices).joins(:taxons).where("spree_prices.amount > 0 and spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").find_each(:batch_size => 100) do |p|
             category = p.taxons.where("spree_taxons.taxonomy_id in (#{y(:cat_taxonomy_ids)})").first
-            pr_vendor = p.property(vendor_prop.name)
+            pr_vendor = p.property(vendor_prop.name) || p.brand
             if category.id && !pr_vendor.blank? && !p.name.blank?
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
@@ -69,6 +69,9 @@ class YandexMarketExport
                 @file.puts("<adult>#{y(:adult)}</adult>") if y(:adult)
                 @file.puts("<age>#{y(:age)}</age>") if y(:age) != 0
                 @file.puts("</offer>")
+            else
+                SupportMailer.xml_error(category,pr_vendor,p).deliver
+                return 0
             end
         end
         @file.puts("</offers>")
@@ -78,7 +81,7 @@ class YandexMarketExport
     def cats(taxonomy)
         taxonomy.root.self_and_descendants
     end
-    
+
     def replace_s(str)
         str.gsub('&','&amp;').gsub('<','').gsub('>','').gsub('"','&quot;').gsub('`','') if str.class == String
     end
