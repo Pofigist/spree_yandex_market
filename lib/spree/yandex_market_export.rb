@@ -55,7 +55,7 @@ class YandexMarketExport
             pr_vendor = p.property(vendor_prop.name) || p.brand
             if category.id && !pr_vendor.blank? && !p.name.blank?
                 @log.info "Продукт #{p.permalink}, #{p.sku} валиден"
-                @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"true\">")
+                @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"false\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
                 @file.puts("<price>#{p.price}</price>")
                 @file.puts("<currencyId>#{ "RUB" }</currencyId>")
