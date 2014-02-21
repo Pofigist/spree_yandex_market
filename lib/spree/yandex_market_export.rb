@@ -75,7 +75,6 @@ class YandexMarketExport
             else
                 @log.info "Отправляется письмо на почту так как продукт '#{p.permalink}', '#{p.sku}' не валиден"
                 Spree::Product.xml_error(category.id,pr_vendor,p.id)
-                break
             end
         end
         @file.puts("</offers>")
