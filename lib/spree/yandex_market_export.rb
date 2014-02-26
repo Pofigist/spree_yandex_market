@@ -5,16 +5,17 @@ class YandexMarketExport
 
 
     def initialize
-        Spree::YandexMarketConfig.set(:use_default_price=>false)
         @log = Logger.new("#{Rails.root}/log/yandex_logger.log")
-        @file =  File.new(Rails.root.join('public', y(:file_path)), 'w:UTF-8')
+        @file =  File.new(Rails.root.join('public','tmp_'+y(:file_path)), 'w:UTF-8')
         @file.truncate(0)
         @file.puts("<yml_catalog date=\"#{Time.now.strftime("%Y-%m-%d %H:%M")}\">")
         @file.puts("<shop>")
         shop
         @file.puts("</shop>")
         @file.puts("</yml_catalog>")
+        File.rename(@file,Rails.root.join('public',y(:file_path))
         @file.close
+        Spree::YandexMarketConfig.set(:use_default_price=>false)
         DestroyPriceWorker.perform()
     end
 
