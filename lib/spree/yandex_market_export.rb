@@ -60,7 +60,7 @@ class YandexMarketExport
                 @log.info "Продукт #{p.permalink}, #{p.sku} валиден"
                 @file.puts("<offer id=\"#{p.id}\" type=\"vendor.model\" available=\"false\">")
                 @file.puts("<url>http://#{Spree::Config.site_url}/products/#{replace_s(p.permalink)}</url>")
-                @file.puts("<price>#{p.prices.last}</price>")
+                @file.puts("<price>#{p.prices.last.amount}</price>")
                 @file.puts("<currencyId>#{ "RUB" }</currencyId>")
                 @file.puts("<categoryId>#{category.id}</categoryId>")
                 p.images.first(10).each do |i|
