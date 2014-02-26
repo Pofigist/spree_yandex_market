@@ -12,7 +12,7 @@
 			<div class="field alpha ten columns">
 				<div class="warning note"><%= t(:yandex_market_settings_note) %></div>
 			</div>
-			<% if Sidekiq::Queue.new.size == 0 %>
+			<% if Sidekiq::Workers.new.size == 0 %>
 			<div class="field omega two columns" style="text-align: right;">
 				<button id="ym_do_export">Экспорт</button>
 			</div>
