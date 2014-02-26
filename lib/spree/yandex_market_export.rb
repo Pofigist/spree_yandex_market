@@ -6,7 +6,7 @@ class YandexMarketExport
 
     def initialize
         @log = Logger.new("#{Rails.root}/log/yandex_logger.log")
-        @file =  File.new(Rails.root.join('public','tmp_'+y(:file_path)), 'w:UTF-8')
+        @file =  File.new(Rails.root.join('public','tmp_'+y(:file_path)), 'w+:UTF-8')
         @file.truncate(0)
         @file.puts("<yml_catalog date=\"#{Time.now.strftime("%Y-%m-%d %H:%M")}\">")
         @file.puts("<shop>")
