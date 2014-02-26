@@ -51,8 +51,10 @@ module Spree
       end
 
       def export
-        Thread.new { `rake yandex_market:export` }
-        render text: t(:yandex_market_generation_started), status: 200
+        if Sidekiq::Queue.new.size == 0
+          Thread.new { `rake yandex_market:export` }
+          render text: t(:yandex_market_generation_started), status: 200
+        end
       end
     end
   end
