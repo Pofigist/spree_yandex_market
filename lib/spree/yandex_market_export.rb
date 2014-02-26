@@ -16,7 +16,7 @@ class YandexMarketExport
         File.rename(@file,Rails.root.join('public',y(:file_path))
         @file.close
         Spree::YandexMarketConfig.set(:use_default_price=>false)
-        DestroyPriceWorker.perform()
+        DestroyPriceWorker.perform_async()
     end
 
    def shop
