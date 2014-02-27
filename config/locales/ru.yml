@@ -2,7 +2,7 @@ ru:
     yandex_market: Экспорт в YandexMarket
     yandex_market_settings: Настройки экспорта в YandexMarket
     yandex_market_settings_note: Для генерации прайс-листа из командной строки используйте команду 'rake yandex_market:export'
-    yandex_market_file_path: Путь к файлу прайс-листа относительно директории 'public/'
+    yandex_market_file_path: Путь к файлу прайс-листа относительно директории 'public/spree/'
     yandex_market_shop_name: Короткое название магазина (до 20 символов)
     yandex_market_shop_company: Название юр.лица (для внутреннего учета)
     yandex_market_shop_agency: Название агентства, поддерживающего сайт
