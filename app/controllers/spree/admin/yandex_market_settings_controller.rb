@@ -51,14 +51,17 @@ module Spree
       end
 
       def export
-        unless Spree::YandexMarketConfig[:generating]
-          @file = File.open(Rails.root.join('public/spree','tmp_'+Spree::YandexMarketConfig[:file_path]), 'r:UTF-8')
-          File.rename(@file,Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
-          @file.close
-          Spree::YandexMarketConfig.set(:use_default_price=>false)
-          DestroyPriceWorker.perform_async()
-          render text: t(:yandex_market_generation_started), status: 200
-        end
+          unless Spree::YandexMarketConfig[:generating]
+              begin
+                  File.delete(Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
+              rescue
+                  true
+              end
+              File.rename(Rails.root.join('public/spree','tmp_'+Spree::YandexMarketConfig[:file_path]),Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
+              Spree::YandexMarketConfig.set(:use_default_price=>false)
+              DestroyPriceWorker.perform_async()
+              render text: t(:yandex_market_generation_started), status: 200
+          end
       end
     end
   end
