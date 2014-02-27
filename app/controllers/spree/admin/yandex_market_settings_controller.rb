@@ -53,7 +53,7 @@ module Spree
       def export
         unless Spree::YandexMarketConfig[:generating]
           @file = File.open(Rails.root.join('public/spree','tmp_'+Spree::YandexMarketConfig[:file_path]), 'w+:UTF-8')
-          File.rename(@file,Rails.root.join('public/spree',Spree::YandexMarketConfig(:file_path)))
+          File.rename(@file,Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
           @file.close
           Spree::YandexMarketConfig.set(:use_default_price=>false)
           DestroyPriceWorker.perform_async()
