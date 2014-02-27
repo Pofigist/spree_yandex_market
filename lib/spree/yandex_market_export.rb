@@ -5,6 +5,7 @@ class YandexMarketExport
 
 
     def initialize
+        Spree::YandexMarketConfig.set(:generating=>true)
         loop do
             break if Sidekiq::Queue.new("pricing").size == 0
             sleep(5.seconds)
@@ -18,6 +19,7 @@ class YandexMarketExport
         @file.puts("</shop>")
         @file.puts("</yml_catalog>")
         @file.close
+        Spree::YandexMarketConfig.set(:generating=>false)
     end
 
    def shop
