@@ -25,6 +25,8 @@ module Spree
     preference :pickup, :boolean, default: true
     preference :delivery, :boolean, default: true
     
+    preference :generating, :boolean, default: false
+    
     
   end
 end
