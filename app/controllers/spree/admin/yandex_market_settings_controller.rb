@@ -17,6 +17,17 @@ module Spree
           render 'taxonomy_taxons'
       end
 
+      def update
+        Spree::YandexMarketConfig.set(params[:preferences])
+
+        respond_to do |format|
+          format.html {
+            flash[:success] = t(:yandex_market_settings_updated)
+            redirect_to edit_admin_yandex_market_settings_path
+          }
+        end
+      end
+
       def properties_find
         if params[:ids] == 'vendor' || params[:ids] == 'model'
           @property=Spree::Property.find(Spree::YandexMarketConfig[:model_prop]) if params[:ids] == 'model'
@@ -26,17 +37,6 @@ module Spree
         else
           @properties=Spree::Property.where("lower(spree_properties.name) ILIKE lower('%#{params[:q][:name_cont]}%')").limit(10).map{|e| [id: e.id,name: e.name]}.flatten.uniq
           render :json=>@properties.to_json
-        end
-      end
-
-      def update
-        Spree::YandexMarketConfig.set(params[:preferences])
-
-        respond_to do |format|
-          format.html {
-            flash[:success] = t(:yandex_market_settings_updated)
-            redirect_to edit_admin_yandex_market_settings_path
-          }
         end
       end
 
