@@ -5,6 +5,10 @@ class YandexMarketExport
 
 
     def initialize
+        loop do
+            break if Sidekiq::Queue.new("pricing").size == 0
+            sleep(5.seconds)
+        end
         @log = Logger.new("#{Rails.root}/log/yandex_logger.log")
         @file =  File.new(Rails.root.join('public','tmp_'+y(:file_path)), 'w+:UTF-8')
         @file.truncate(0)
@@ -14,9 +18,6 @@ class YandexMarketExport
         @file.puts("</shop>")
         @file.puts("</yml_catalog>")
         @file.close
-        File.rename(@file,Rails.root.join('public',y(:file_path)))
-        Spree::YandexMarketConfig.set(:use_default_price=>false)
-        DestroyPriceWorker.perform_async()
     end
 
    def shop
