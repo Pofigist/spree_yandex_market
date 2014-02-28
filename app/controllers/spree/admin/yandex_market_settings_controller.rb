@@ -57,10 +57,14 @@ module Spree
               rescue
                   true
               end
-              File.rename(Rails.root.join('public/spree','tmp_'+Spree::YandexMarketConfig[:file_path]),Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
-              Spree::YandexMarketConfig.set(:use_default_price=>false)
-              DestroyPriceWorker.perform_async()
-              render text: t(:yandex_market_generation_started), status: 200
+              begin
+                File.rename(Rails.root.join('public/spree','tmp_'+Spree::YandexMarketConfig[:file_path]),Rails.root.join('public/spree',Spree::YandexMarketConfig[:file_path]))
+                Spree::YandexMarketConfig.set(:use_default_price=>false)
+                DestroyPriceWorker.perform_async()
+                render text: t(:yandex_market_generation_started), status: 200
+              rescue
+                render text: "Ошибка файла не существует! Сначала запустите наценку.", status: 200
+              end
           end
       end
     end
